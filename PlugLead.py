@@ -3,8 +3,8 @@
 class PlugLead:
     def __init__(self, mapping):
         if type(mapping) is str and len(mapping) == 2 and mapping[0] != mapping[1]: #To Check If Mapping Entered Is Valid, Else Raise Error
-            self.plug1 = mapping[0]         #Creates 2 Attributes plug1 And plug2       
-            self.plug2 = mapping[1]         #With The Alphabets                                            
+            self.plug1 = mapping[0].upper() #Creates 2 Attributes plug1 And plug2       
+            self.plug2 = mapping[1].upper() #With The Alphabets                                            
 
         else:
             print("Invalid Entry: Check PlugLead value entered is String of 2 Different Alphabets")

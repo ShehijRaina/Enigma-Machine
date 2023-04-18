@@ -43,25 +43,30 @@ class Rotor:
 
         return letter
 
-#Creating Rotors
-'''Rotor I'''
-I = Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", "Q")
-
-'''Rotor II'''      
-II = Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", "E")
-
-'''Rotor III'''                                                                                                                
-III = Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO","V")
-
-'''Rotor IV'''
-IV = Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", "J")
-
-'''Rotor V'''
-V = Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", "Z")
-
 def rotor_from_name(name):                  #Returns Rotor From Its String Name
-    NAMES = {"I": I, "II": II, "III": III, "IV": IV, "V": V}
-    if name in NAMES:
-        return NAMES[name]
+    if name in ['I', 'II', 'III', 'IV', 'V']:
+        #Creating Rotors
+        if name == 'I':
+            '''Rotor I'''
+            return(Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", "Q"))
+        elif name == 'II':
+            '''Rotor II'''
+            return(Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", "E"))
+        elif name == 'III':
+            '''Rotor III'''                                                                                                                
+            return(Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO","V"))
+        elif name == 'IV':
+            '''Rotor IV'''
+            return(Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", "J"))
+        elif name == 'V':
+            '''Rotor V'''
+            return(Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", "Z"))
+    
+
+    
+
+    
+    
+    
 
 

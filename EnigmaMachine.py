@@ -52,55 +52,57 @@ class EnigmaMachine:
             length = len(text)              
             
             for i in range(0,length):
-                letter = text[i]
+                if text[i].isalpha():
+                    letter = text[i]
 
-                #For Rotation Of Rotors Before Encoding
-                rotortrigger = False
-                if self.rotorright.notch:   #Checks If Rightmost Rotor Has A Notch
-                    if self.posright == self.rotorright.notch:
-                        rotortrigger = True
-                self.posright = self.alphabets[(self.alphabets.index(self.posright) + 1) % 26]#Rotates Rightmost Rotor 1 step
-                if rotortrigger:
-                    rotortrigger = False    
-                    if self.rotormid.notch: #Checks If Middle Rotor Has A Notch
-                        if self.posmid == self.rotormid.notch:
+                    #For Rotation Of Rotors Before Encoding
+                    rotortrigger = False
+                    if self.rotorright.notch:   #Checks If Rightmost Rotor Has A Notch
+                        if self.posright == self.rotorright.notch:
                             rotortrigger = True
-                    self.posmid = self.alphabets[(self.alphabets.index(self.posmid) + 1) % 26]#Rotates Middle Rotor 1 step
+                    self.posright = self.alphabets[(self.alphabets.index(self.posright) + 1) % 26]#Rotates Rightmost Rotor 1 step
                     if rotortrigger:
-                        rotortrigger = False
-                        self.posleft = self.alphabets[(self.alphabets.index(self.posmid) + 1) % 26]#Rotates Leftmost Rotor 1 step
-                #Double Step
+                        rotortrigger = False    
+                        if self.rotormid.notch: #Checks If Middle Rotor Has A Notch
+                            if self.posmid == self.rotormid.notch:
+                                rotortrigger = True
+                        self.posmid = self.alphabets[(self.alphabets.index(self.posmid) + 1) % 26]#Rotates Middle Rotor 1 step
+                        if rotortrigger:
+                            rotortrigger = False
+                            self.posleft = self.alphabets[(self.alphabets.index(self.posmid) + 1) % 26]#Rotates Leftmost Rotor 1 step
+                    #Double Step
+                    else:
+                        if self.rotormid.notch:
+                            if self.posmid == self.rotormid.notch:
+                                self.posmid = self.alphabets[(self.alphabets.index(self.posmid) + 1) % 26]#Rotates Middle Rotor 1 step
+                                self.posleft = self.alphabets[(self.alphabets.index(self.posleft) + 1) % 26]#Rotates Leftmost Rotor 1 step
+                    
+                    offsetleft = self.alphabets.index(self.posleft)  #Finds Offset For All Rotors
+                    offsetmid = self.alphabets.index(self.posmid)    #After Rotation
+                    offsetright = self.alphabets.index(self.posright)
+
+                    '''Letter Goes Through Plugboard'''
+                    STEP1 = self.plugboard.encode(letter)
+                    
+                    '''Letter Goes Through Rotors From Right To Left'''
+                    STEP2 = self.rotorright.encode_right_to_left(STEP1, offsetright)
+                    STEP3 = self.rotormid.encode_right_to_left(STEP2, offsetmid)
+                    STEP4 = self.rotorleft.encode_right_to_left(STEP3, offsetleft)
+                    
+                    '''Letter Goes Through Reflector'''
+                    STEP5 = self.reflector.encode(STEP4)
+                    
+                    '''Letter Goes Through Rotors From Left To Right'''
+                    STEP6 = self.rotorleft.encode_left_to_right(STEP5, offsetleft)
+                    STEP7 = self.rotormid.encode_left_to_right(STEP6, offsetmid)
+                    STEP8 = self.rotorright.encode_left_to_right(STEP7, offsetright)
+                    
+                    '''Letter Goes Through Plugboard'''
+                    STEP9 = self.plugboard.encode(STEP8)
                 else:
-                    if self.rotormid.notch:
-                        if self.posmid == self.rotormid.notch:
-                            self.posmid = self.alphabets[(self.alphabets.index(self.posmid) + 1) % 26]#Rotates Middle Rotor 1 step
-                            self.posleft = self.alphabets[(self.alphabets.index(self.posleft) + 1) % 26]#Rotates Leftmost Rotor 1 step
-                
-                offsetleft = self.alphabets.index(self.posleft)  #Finds Offset For All Rotors
-                offsetmid = self.alphabets.index(self.posmid)    #After Rotation
-                offsetright = self.alphabets.index(self.posright)
-
-                '''Letter Goes Through Plugboard'''
-                STEP1 = self.plugboard.encode(letter)
-                
-                '''Letter Goes Through Rotors From Right To Left'''
-                STEP2 = self.rotorright.encode_right_to_left(STEP1, offsetright)
-                STEP3 = self.rotormid.encode_right_to_left(STEP2, offsetmid)
-                STEP4 = self.rotorleft.encode_right_to_left(STEP3, offsetleft)
-                
-                '''Letter Goes Through Reflector'''
-                STEP5 = self.reflector.encode(STEP4)
-                
-                '''Letter Goes Through Rotors From Left To Right'''
-                STEP6 = self.rotorleft.encode_left_to_right(STEP5, offsetleft)
-                STEP7 = self.rotormid.encode_left_to_right(STEP6, offsetmid)
-                STEP8 = self.rotorright.encode_left_to_right(STEP7, offsetright)
-                
-                '''Letter Goes Through Plugboard'''
-                STEP9 = self.plugboard.encode(STEP8)
-
-                
+                    STEP9 = text[i]
                 ciphertext += STEP9 #Encoded Letter Is Added To Rest Of Encoded Text
+            
                 
             self.rotorleft.rotor_reset()
             self.rotormid.rotor_reset()
