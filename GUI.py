@@ -18,8 +18,6 @@ def enigma_machine():
 
     text = textbox.get("0.0", "end")[0:-1]
     cipher = enigma.encode(text)
-    print(text)
-    print(cipher)
     textbox2.delete("0.0", "end")
     textbox2.insert("0.0", cipher)
     
